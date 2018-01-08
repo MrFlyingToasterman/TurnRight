@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         axisIntersections();
         derivation();
+        extremeValues();
     }
 
     public void axisIntersections() {
@@ -103,26 +104,70 @@ public class MainActivity extends AppCompatActivity {
         print2log("Third derviation");
         printDerv(deriv3);
     }
+
+    public void extremeValues(){
+        double[] History = new double[4];
+        History[1] = deriv1[0];
+        History[2] = deriv1[1];
+        History[3] = deriv1[2];
+
+        double[] fixedH = solveTheEquation(History);
+        double p = fixedH[2];
+        double q = fixedH[3];
+        double lxone = -p/2 + Math.sqrt((((p/2)*(p/2)) -q));
+        double lxtwo = -p/2 - Math.sqrt((((p/2)*(p/2)) -q));
+
+        lxone = Math.round(lxone * 100) / 100.0;
+        lxtwo = Math.round(lxtwo * 100) / 100.0;
+
+        double lyone = x3 * ((lxone)*(lxone)*(lxone)) + x2 * ((lxone)*(lxone)) + x1 * lxone + d ;
+        double lytwo = x3 * ((lxtwo)*(lxtwo)*(lxtwo)) + x2 * ((lxtwo)*(lxtwo)) + x1 * lxtwo + d ;
+
+        lyone = Math.round(lyone * 100) / 100.0;
+        lytwo = Math.round(lytwo * 100) / 100.0;
+
+        String p1 = "";
+        String p2 = "";
+
+        double lxyone = (deriv2[0] * lxone) + deriv2[1];
+
+        if(lxyone < 0.0){
+            p1 = "HP " + "("+ lxone + "|" + lyone + ")";
+        }else if (lxyone > 0.0){
+            p1 = "LP " + "("+ lxone + "|" + lyone + ")";
+        }else{
+            p1 = "N/A" + "("+ lxone + "|" + lyone + ")";
+        }
+
+        print2log(p1);
+
+        double lxytwo = (deriv2[0] * lxtwo) + deriv2[1];
+
+        if(lxytwo < 0.0){
+            p2 = "HP " + "("+ lxtwo + "|" + lytwo + ")";
+        } else if (lxytwo > 0.0){
+            p2 = "LP " + "("+ lxtwo + "|" + lytwo + ")";
+        }else{
+            p2 = "N/A" + "("+ lxtwo + "|" + lytwo + ")";
+        }
+
+        print2log(p2);
+
+    }
+
     public double[] solveTheEquation(double History[]) {
 
-        if (History[1] > 1.0) {
-            double subst = History[1] - 1.0;
-            subst = Math.round(subst * 100) / 100.0;
-            History[1] = History[1] - subst;
-
-            History[2] = History[2] / subst;
-            History[3] = History[3] / subst;
-        }
-
-        if (History[1] < 1.0) {
-            double div = History[1];
-            History[1] = 1;
-
-            History[2] = History[2] /div;
-            History[3] = History[3] /div;
 
 
-        }
+
+        double subst = History[1];
+        subst = Math.round(subst * 100) / 100.0;
+        History[1] = History[1] / subst;
+        History[2] = History[2] / subst;
+        History[3] = History[3] / subst;
+
+
+
         return History;
     }
 
