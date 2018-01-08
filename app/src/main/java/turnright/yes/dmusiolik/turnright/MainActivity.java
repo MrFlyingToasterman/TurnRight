@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     //Sec Target
     public double Y = 0;
     //Terz Target
+    double xone = 0;
+    double xtwo = 0;
 
     //Start
     public void calc(View view) {
@@ -54,6 +56,41 @@ public class MainActivity extends AppCompatActivity {
         double hornerHistory[] = hornerschema();
         print2log("Hornerschema History:");
         printHistory(hornerHistory);
+        //Check for Zero positions
+        if (hornerHistory[4] == 0.0) {
+            print2log("Zero position found! @" + hornerHistory[0]);
+        }else {
+            print2log("Math Error!");
+            return;
+        }
+        print2log("Looking for more Zero positions ...");
+        double fixed_hoernerhistory[] = solveTheEquation(hornerHistory);
+        pqFormula(fixed_hoernerhistory[1],fixed_hoernerhistory[2]);
+        print2log("Found Zero position: " + xone);
+        print2log("Found Zero position: " + xtwo);
+    }
+
+    public double[] solveTheEquation(double History[]) {
+
+        if (History[1] > 1.0) {
+            double subst = History[1] - 1.0;
+            subst = Math.round(subst * 100) / 100.0;
+            History[1] = History[1] - subst;
+
+            History[2] = History[2] / subst;
+            History[3] = History[3] / subst;
+        }
+
+        if (History[1] < 1.0) {
+            double div = History[1];
+            History[1] = 1;
+
+            History[2] = History[2] /div;
+            History[3] = History[3] /div;
+
+
+        }
+        return History;
     }
 
     public double[] hornerschema() {
@@ -69,27 +106,28 @@ public class MainActivity extends AppCompatActivity {
         double ergebnis1 = 0;
         double gen = 0.1;
 
-        double[] history = new double[4];
+        double[] history = new double[5];
 
         for (int i = 0; startrange <= stoprange; startrange = startrange + Math.round(gen * 100) / 100.0) {
 
             startrange = Math.round(startrange * 100) / 100.0;
             x3 = Math.round(x3 * 100) /100.0;
+            history[1] = x3;
 
             ergebnis0 = 0;
             ergebnis0 = (startrange * x3) + x2;
             ergebnis0 = Math.round(ergebnis0 * 100) / 100.0;
-            history[1] = ergebnis0;
+            history[2] = ergebnis0;
 
             ergebnis1 = 0;
             ergebnis1 = (startrange * ergebnis0) + x1;
             ergebnis1 = Math.round(ergebnis1 * 100) / 100.0;
-            history[2] = ergebnis1;
+            history[3] = ergebnis1;
 
             ergebnis0 = 0;
             ergebnis0 = (startrange * ergebnis1) + locald;
             ergebnis0 = Math.round(ergebnis0 * 100) / 100.0;
-            history[3] = ergebnis0;
+            history[4] = ergebnis0;
 
 
             if (ergebnis0 == 0.0) {
@@ -102,8 +140,9 @@ public class MainActivity extends AppCompatActivity {
         return history;
     }
 
-    public void pqFormula() {
-
+    public void pqFormula(double p, double q) {
+        xone = -p/2 + Math.sqrt((Math.pow(p/2, 2) -q));
+        xtwo = -p/2 - Math.sqrt((Math.pow(p/2, 2) -q));
     }
 
     public void printHistory(double[] history) {
