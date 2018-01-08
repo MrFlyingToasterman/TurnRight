@@ -65,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
         }
         print2log("Looking for more Zero positions ...");
         double fixed_hoernerhistory[] = solveTheEquation(hornerHistory);
-        pqFormula(fixed_hoernerhistory[1],fixed_hoernerhistory[2]);
+        print2log("Fixed Horner History:");
+        printHistory(fixed_hoernerhistory);
+        pqFormula(fixed_hoernerhistory[2],fixed_hoernerhistory[3]);
         print2log("Found Zero position: " + xone);
         print2log("Found Zero position: " + xtwo);
     }
@@ -141,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pqFormula(double p, double q) {
-        xone = -p/2 + Math.sqrt((Math.pow(p/2, 2) -q));
-        xtwo = -p/2 - Math.sqrt((Math.pow(p/2, 2) -q));
+        xone = -p/2 + Math.sqrt((((p/2)*(p/2)) -q));
+        xtwo = -p/2 - Math.sqrt((((p/2)*(p/2)) -q));
     }
 
     public void printHistory(double[] history) {
