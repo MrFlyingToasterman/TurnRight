@@ -17,6 +17,10 @@ public class MainActivity extends AppCompatActivity {
     public double d = 0;
     //Sec Target
     public double Y = 0;
+    //derivations
+    double[] deriv1 = new double[3];
+    double[] deriv2 = new double[2];
+    double[] deriv3 = new double[1];
     //Terz Target
     double xone = 0;
     double xtwo = 0;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         d = Double.parseDouble("" + txt_d.getText());
 
         axisIntersections();
+        derivation();
     }
 
     public void axisIntersections() {
@@ -72,6 +77,32 @@ public class MainActivity extends AppCompatActivity {
         print2log("Found Zero position: " + xtwo);
     }
 
+    public void derivation(){
+        double localx3 = x3;
+        double localx2 = x2;
+        double localx1 = x1;
+
+        localx3 = localx3 * 3;
+        localx2 = localx2 * 2;
+
+        deriv1[0] = localx3;
+        deriv1[1] = localx2;
+        deriv1[2] = localx1;
+
+        localx3 = localx3 * 2;
+
+        deriv2[0] = localx3;
+        deriv2[1] = localx2;
+
+        deriv3[0] = localx3;
+
+        print2log("First derviation");
+        printDerv(deriv1);
+        print2log("Secound derviation");
+        printDerv(deriv2);
+        print2log("Third derviation");
+        printDerv(deriv3);
+    }
     public double[] solveTheEquation(double History[]) {
 
         if (History[1] > 1.0) {
@@ -151,6 +182,24 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < history.length; i++) {
             print2log("History " + i + ":  " + history[i]);
         }
+    }
+
+    public void printDerv(double[] input) {
+        DecimalFormat fmt = new DecimalFormat("+#,##0.00;-#");
+        String preF = "";
+        switch (input.length){
+            case 1:
+                preF = "f ' ' ' (X) = " + fmt.format(deriv3[0]);
+                break;
+            case 2:
+                preF = "f ' ' (X) = " + fmt.format(deriv2[0]) + "X " + fmt.format(deriv2[1]);
+                break;
+            case 3:
+                preF = "f ' (X) = " + fmt.format(deriv1[0]) + "X² " + fmt.format(deriv1[1]) + "X " + fmt.format(deriv1[2]);
+                break;
+        }
+
+        print2log(preF);
     }
 
     public void printBasicForm(String X) {
