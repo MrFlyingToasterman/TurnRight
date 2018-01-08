@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Start
     public void calc(View view) {
+        clearLog();
         //Read in
         print2log("Prepare calculation ...");
         TextView txt_x3 = (TextView) findViewById(R.id.txt_x3);
@@ -41,19 +42,74 @@ public class MainActivity extends AppCompatActivity {
     public void axisIntersections() {
         //Y axis
         print2log("");
-        print2log("---Y AXIS---");
+        print2log("---Y-AXIS---");
         printBasicForm("0");
         print2log("Y = " + d);
         Y = d;
 
         //X axis
         print2log("");
-        print2log("---X AXIS---");
+        print2log("---X-AXIS---");
         printBasicForm("X");
+        double hornerHistory[] = hornerschema();
+        print2log("Hornerschema History:");
+        printHistory(hornerHistory);
+    }
+
+    public double[] hornerschema() {
+        double iks1 = x1;
+        double iks2 = x2;
+        double iks3 = x3;
+        double locald = d;
+
+        double startrange = -20;
+        double stoprange = 20;
+
+        double ergebnis0 = 0;
+        double ergebnis1 = 0;
+        double gen = 0.1;
+
+        double[] history = new double[4];
+
+        for (int i = 0; startrange <= stoprange; startrange = startrange + Math.round(gen * 100) / 100.0) {
+
+            startrange = Math.round(startrange * 100) / 100.0;
+            x3 = Math.round(x3 * 100) /100.0;
+
+            ergebnis0 = 0;
+            ergebnis0 = (startrange * x3) + x2;
+            ergebnis0 = Math.round(ergebnis0 * 100) / 100.0;
+            history[1] = ergebnis0;
+
+            ergebnis1 = 0;
+            ergebnis1 = (startrange * ergebnis0) + x1;
+            ergebnis1 = Math.round(ergebnis1 * 100) / 100.0;
+            history[2] = ergebnis1;
+
+            ergebnis0 = 0;
+            ergebnis0 = (startrange * ergebnis1) + locald;
+            ergebnis0 = Math.round(ergebnis0 * 100) / 100.0;
+            history[3] = ergebnis0;
+
+
+            if (ergebnis0 == 0.0) {
+                history[0] = startrange;
+                return history;
+            }
+
+        }
+        print2log("CANT FIND ANY ZEROPOINTS!");
+        return history;
     }
 
     public void pqFormula() {
 
+    }
+
+    public void printHistory(double[] history) {
+        for(int i = 0; i < history.length; i++) {
+            print2log("History " + i + ":  " + history[i]);
+        }
     }
 
     public void printBasicForm(String X) {
@@ -64,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
     public void print2log(String logme) {
         TextView output = (TextView) findViewById(R.id.txt_output);
         output.setText(output.getText() + " " + logme + "\n");
+    }
+
+    public void clearLog() {
+        TextView output = (TextView) findViewById(R.id.txt_output);
+        output.setText("");
     }
 
     @Override
